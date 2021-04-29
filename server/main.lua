@@ -1,8 +1,8 @@
 ESX = nil
 local playerIdentity = {}
 local alreadyRegistered = {}
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-local ESXConfig = ESX.GetConfig()
+TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end ESXConfig = ESX.GetConfig())
+
 
 if Config.UseDeferrals then
 	AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
