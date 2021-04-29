@@ -1,7 +1,9 @@
 ESX = nil
 local playerIdentity = {}
 local alreadyRegistered = {}
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+local ESXConfig = {}
+TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end ESXConfig = ESX.GetConfig())
+
 
 if Config.UseDeferrals then
 	AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
@@ -11,8 +13,12 @@ if Config.UseDeferrals then
 
 			for k,v in ipairs(GetPlayerIdentifiers(playerId)) do
 				if string.match(v, 'license:') then
+					if ESXConfig.UseKashacters then 
+						identifier = v
+					else
 					identifier = string.sub(v, 9)
 					break
+					end
 				end
 			end
 	
