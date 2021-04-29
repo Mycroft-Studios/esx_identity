@@ -1,9 +1,8 @@
 ESX = nil
 local playerIdentity = {}
 local alreadyRegistered = {}
-local ESXConfig = {}
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end ESXConfig = ESX.GetConfig())
-
+TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+local ESXConfig = ESX.GetConfig()
 
 if Config.UseDeferrals then
 	AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
@@ -15,6 +14,7 @@ if Config.UseDeferrals then
 				if string.match(v, 'license:') then
 					if ESXConfig.UseKashacters then 
 						identifier = v
+						break
 					else
 					identifier = string.sub(v, 9)
 					break
@@ -119,12 +119,17 @@ elseif not Config.UseDeferrals then
 		local playerId, identifier = source
 		Citizen.Wait(40)
 
-			for k,v in ipairs(GetPlayerIdentifiers(playerId)) do
-				if string.match(v, 'license:') then
-					identifier = string.sub(v, 9)
+		for k,v in ipairs(GetPlayerIdentifiers(playerId)) do
+			if string.match(v, 'license:') then
+				if ESXConfig.UseKashacters then 
+					identifier = v
 					break
+				else
+				identifier = string.sub(v, 9)
+				break
 				end
 			end
+		end
 
 		if identifier then
 			MySQL.Async.fetchAll('SELECT firstname, lastname, dateofbirth, sex, height FROM users WHERE identifier = @identifier', {
